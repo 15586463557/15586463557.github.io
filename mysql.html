@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mysql命令</title>
+</head>
+<style>
+    span {
+        color: crimson;
+    }
+
+    h3 {
+        color: indigo;
+    }
+</style>
+<body>
+<h1>MYSQL 命令行大全 (简洁、明了、全面)</h1>
+
+
+<h3>一、登录与退出（首先要保证mysql服务已经启动，才可以进行以下操作！）</h3>
+<p>1、使用MySQL Command Line Client（MySQL的DOS界面）登录mysql<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出现Enter password:直接输入安装时的密码即可<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此时的提示符是：mysql&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/mysqlCommand.jpg" height="245"><br></p>
+
+<p>2、在DOS命令窗口登录mysql输入:<span>mysql -hlocalhost -uroot -p</span>回车进入mysql数据库<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-h 表示服务器名(IP地址)，localhost表示本地，如果是本机也可以省略localhost<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-u 为数据库用户名，root是mysql默认用户名<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-p 为密码，如果设置了密码，可直接在-p后链接输入，如：-p123456<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果用户没有设置密码，显示Enter password时，直接回车即可<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注意，如果你的mysql没有安装在C盘下，你需要先使用DOS命令进入mysql的安装目录下的bin目录中<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如：安装在了e盘，输入&nbsp;<span>e:</span>&nbsp;进入e盘，在输入<span>cd e:\Tools\MySQL5.5.25\bin</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入到mysql的bin目录下才可以输入 <span>mysql -hlocalhost -uroot -p</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;此时的提示符是：mysql&gt;<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="img/cmdlogin.jpg" height="245"><br></p>
+
+<p>3、输入：<span>quit</span>或<span>exit</span> ——退出MySQL</p>
+
+<h3>二、库操作（登录mysql后输入命令，后面的分号一定不能丢了，代表命令结束！）</h3>
+
+<p>1、显示所有的数据库</p>
+命令：<span>show databases;</span> (注意：最后有个s)<br>
+mysql&gt;<span>show databases;</span>
+<p>2、创建数据库</p>
+命令：<span>create database 数据库名;</span><br>
+例如：建立一个名为xhkdb的数据库<br>
+mysql&gt;<span>create database xhkdb;</span>
+<p>3、删除数据库</p>
+命令：<span>drop database 数据库名;</span><br>
+例如：删除名为 xhkdb的数据库<br>
+mysql&gt;<span>drop database xhkdb;</span>
+<p>4、选择数据库</p>
+命令：<span>use 数据库名;</span><br>
+例如：如果xhkdb数据库存在，选择它：<br>
+mysql&gt;<span>use xhkdb;</span><br>
+屏幕提示：Database changed
+<p>5、查看当前使用的数据库</p>
+mysql&gt;<span>select database();</span>
+<p>6、当前数据库包含的表信息：</p>
+mysql&gt;<span>show tables;</span>（注意：最后有个s）
+
+<h3>三、表操作，操作之前应选择(<span>use 数据库名;</span>)某个数据库</h3>
+<p>1、建表</p>
+命令：<span>create table 表名(字段名 类型 非空 主键 自增,字段名 类型 非空,n..);</span> ----多个字段名用逗号隔开<br>
+mysql&gt;<span>create table MyClass(</span><br>
+&gt; <span>id int(4) not null primary key auto_increment,</span> ----表示字段名为id,类型为int长度为4,非空,主键自增长<br>
+&gt; <span>name char(20) not null,</span> ----表示字段名为name,类型为char长度为20,非空<br>
+&gt; <span>sex int(4) not null default '1',</span> ----表示字段名为sex,类型为int长度为4,非空,默认值为1<br>
+&gt; <span>degree double(16,2)</span> ---表示字段名为degree,类型为double<br>
+&gt; <span>);</span><br>
+
+<p>2、获取表结构</p>
+命令：<span>desc 表名;</span>或者<span>show columns from 表名;</span><br>
+mysql&gt;<span>describe MyClass</span><br>
+mysql&gt;<span>desc MyClass;</span><br>
+mysql&gt;<span>show columns from MyClass;</span><br>
+
+<p>3、删除表</p>
+命令：<span>drop table 表名;</span><br>
+例如：删除表名为 MyClass 的表<br>
+mysql&gt;<span>drop table MyClass;</span><br>
+
+<p>4、插入数据</p>
+命令：<span>insert into 表名(字段名1,字段名2,字段名n) values (值1,值2,值n),(值1,值2,值n),(n...);</span><br>
+例如：往表MyClass中插入三条信息，只选择了(姓名，成绩)两个字段：name为Tom的成绩为45, name为Joan 的成绩为99，name为Wang的成绩为77<br>
+mysql&gt; <span>insert into MyClass(name,degree)values('Tom',45),('Joan',99),('Wang',77);</span><br>
+
+<p>5、查询表中的数据</p>
+1)、查询所有行(*表示所有)<br>
+命令：<span>select * from 表名;</span><br>
+例如：查看表 MyClass 中所有数据<br>
+mysql&gt; <span>select * from MyClass;</span><br>
+2）、查询前几行数据<br>
+例如：查看表 MyClass 中前两行数据<br>
+mysql&gt; <span>select * from MyClass order by id limit 0,2;</span><br>
+或者：<br>
+mysql&gt; <span>select * from MyClass limit 0,2;</span><br>
+
+<p>6、删除表</p>
+命令：<span>delete from 表名 where 表达式;</span><br>
+例如：删除表 MyClass中编号为1的记录<br>
+mysql&gt; <span>delete from MyClass where id=1;</span><br>
+
+<p>7、修改表中数据：update 表名 set 字段=新值,…where 条件</p>
+mysql&gt; <span>update MyClass set name=’Mary’where id=2;</span><br>
+
+<p>8、在表中增加字段：</p>
+命令：<span>alter table 表名 add字段 类型 其他;</span><br>
+例如：在表MyClass中添加了一个字段passtest，类型为int(4)，默认值为<br>
+mysql&gt; <span>alter table MyClass add passtest int(4) default ’′</span><br>
+
+<p>9、更改表名：</p>
+命令：<span>rename table 原表名 to 新表名;</span><br>
+例如：表MyClass名字更改为YouClass<br>
+mysql&gt; <span>rename table MyClass to YouClass;</span><br>
+更改字段名<br>
+mysql&gt; <span>update 表名 set 字段名 = 新内容;</span><br>
+mysql&gt; <span>update 表名 set 字段名 = replace(字段名,'旧内容','新内容');</span><br>
+
+<h2>四、导出，导入</h2>
+
+<h3>一、导出数据库用mysqldump命令（注意mysql的安装路径，即此命令的路径）:</h3>
+
+<span>/usr/local/mysql/bin/  --->  mysql的data目录</span><br>
+<p>1、导出数据和表结构：</p>
+mysqldump -u用户名 -p密码 数据库名 > 数据库名.sql;<br>
+<span>/usr/local/mysql/bin/mysqldump -uroot -p abc > abc.sql;</span><br>
+敲回车后会提示输入密码<br>
+
+<p>2、只导出表结构</p>
+<span>mysqldump -u用户名 -p密码 -d 数据库名 > 数据库名.sql;</span><br>
+<span>/usr/local/mysql/bin/mysqldump -uroot -p -d abc > abc.sql;</span><br>
+
+<p>3.导出指定表的数据</p>
+<span>mysqldump -t 数据库名 -u用户名 -p密码 --tables 表1 表2 >/home/;</span><br>
+
+<p>4.导出指定表的结构</p>
+<span>mysqldump -d 数据库名 -u用户名 -p密码 --tables 表1 表2 >/home/;</span><br>
+
+<p>5.导出表的数据及结构</p>
+<span>mysqldump  数据库 -u用户名 -p密码 --tables 表1 表2 >/home/;</span><br>
+
+<p>6.若数据中，某些表除外，其余表都需导出</p>
+<span>mysqldump -h IP -u 用户名 -p密码 --default-character-set=utf8 数据库名 --ignore-table=库名.表名1;</span><br>
+<span>--ignore-table=库名.表名2 >/home/;</span><br>
+
+
+<h3>二、导入数据库</h3>
+
+<p>1、首先建空数据库</p>
+mysql&gt;<span>create database abc;</span><br>
+
+<p>2、导入数据库</p>
+
+方法一：<br>
+（1）选择数据库<br>
+mysql&gt;<span>use abc;</span><br>
+（2）设置数据库编码<br>
+mysql&gt;<span>set names utf8;</span><br>
+（3）导入数据（注意sql文件的路径）<br>
+mysql&gt;<span>source /home/abc/abc.sql;</span><br>
+<br>
+方法二：<br>
+<span>mysql -u用户名 -p密码 数据库名 < 数据库名.sql;</span>><br>
+mysql&gt;<span>mysql -uabc_f -p abc < abc.sql;</span><br>
+
+</body>
+</html>
